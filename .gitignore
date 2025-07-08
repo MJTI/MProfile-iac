@@ -10,3 +10,6 @@ crash.log
 terraform.rc
 
 .vscode/
+
+.terragrunt-cache
+terragrunt-debug.tfvars*
