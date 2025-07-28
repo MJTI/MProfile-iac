@@ -1,5 +1,5 @@
 terraform {
-    source = "git@github.com:MJTI/terraform-aws-eks-controllers.git?ref=0.1.2"
+    source = "git@github.com:MJTI/terraform-aws-eks-controllers.git?ref=0.2.5"
 }
 
 include "root" {
