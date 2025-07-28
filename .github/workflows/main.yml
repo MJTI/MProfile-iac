@@ -1,0 +1,60 @@
+name: CI Terraform MProfile AWS Infrastructure
+
+on:
+  pull_request:
+    paths:
+      - 'infrastructure-live/staging/**'
+      - '.github/workflows/**'
+    branches:
+      - main
+  push:
+    paths:
+      - 'infrastructure-live/staging/**'
+      - '.github/workflows/**'
+    branches:
+      - '**'
+  workflow_dispatch:
+
+jobs:
+  test_mprofile_structure:
+    runs-on: ubuntu-24.04
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS with OIDC
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        with:
+          role-to-assume: "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/terraform-githubaction"
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: install terraform
+        uses: hashicorp/setup-terraform@v3.1.2
+        with:
+          terraform_version: "1.12.2"
+
+      - name: Install Terragrunt
+        uses: gruntwork-io/terragrunt-action@v3
+        with:
+          tg_version: "0.83.0"
+
+      - name: Check Terragrunt Version
+        run: terragrunt --version
+
+      - name: Terragrunt init
+        run: terragrunt run init --all --working-dir ./staging --non-interactive --no-color
+
+      - name: Checking The Formatting Of The Files
+        run: terragrunt hcl fmt -check --all --working-dir ./staging --non-interactive --no-color
+        continue-on-error: true
+
+      - name: Validating Terraform files
+        run: terragrunt run validate --all --working-dir ./staging --non-interactive --no-color
+
+      - name: Planning Terragrunt
+        id: plan
+        run: terragrunt run plan --all --working-dir ./staging --non-interactive --no-color
