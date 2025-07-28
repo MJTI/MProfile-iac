@@ -6,7 +6,6 @@ remote_state {
   }
 
   config = {
-    profile = "default"
     bucket = "mprofile-terraform"
     use_lockfile = true
     key = "${path_relative_to_include()}/terraform.tfstate"
