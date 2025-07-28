@@ -47,9 +47,6 @@ jobs:
           tg_version: "0.83.0"
           tf_path: "terraform"
 
-      - name: Check Terragrunt Version
-        run: terragrunt --version
-
       - name: Terragrunt init
         run: terragrunt run init --all --working-dir ./infrastructure-live/staging --non-interactive --no-color
 
