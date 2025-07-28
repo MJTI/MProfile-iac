@@ -26,6 +26,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Configure AWS with OIDC
         uses: aws-actions/configure-aws-credentials@v4.1.0
         with:
