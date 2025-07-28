@@ -44,22 +44,18 @@ jobs:
           tofu_version: "1.10.3"
 
       - name: Check Terragrunt Version
-        run: terragrunt --version && pwd && ls -lha && ls -lha Infrastructure-live
+        run: terragrunt --version
 
       - name: Terragrunt init
-        working-directory: infrastructure-live
-        run: terragrunt run init --all --working-dir ./staging --non-interactive --no-color
+        run: terragrunt run init --all --working-dir ./infrastructure-live/staging --non-interactive --no-color
 
       - name: Checking The Formatting Of The Files
-        working-directory: infrastructure-live
-        run: terragrunt hcl fmt -check --all --working-dir ./staging --non-interactive --no-color
+        run: terragrunt hcl fmt -check --all --working-dir ./infrastructure-live/staging --non-interactive --no-color
         continue-on-error: true
 
       - name: Validating Terraform files
-        working-directory: infrastructure-live
-        run: terragrunt run validate --all --working-dir ./staging --non-interactive --no-color
+        run: terragrunt run validate --all --working-dir ./infrastructure-live/staging --non-interactive --no-color
 
       - name: Planning Terragrunt
         id: plan
-        working-directory: infrastructure-live
-        run: terragrunt run plan --all --working-dir ./staging --non-interactive --no-color
+        run: terragrunt run plan --all --working-dir ./infrastructure-live/staging --non-interactive --no-color
