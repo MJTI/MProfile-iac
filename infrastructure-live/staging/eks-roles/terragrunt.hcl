@@ -1,5 +1,5 @@
 terraform {
-    source = "git@github.com:MJTI/terraform-aws-eks-iam-roles.git?ref=0.1.3"
+    source = "git@github.com:MJTI/terraform-aws-eks-iam-roles.git?ref=0.1.5"
 }
 
 include "root" {
