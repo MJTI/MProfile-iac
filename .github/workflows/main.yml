@@ -44,8 +44,7 @@ jobs:
           tofu_version: "1.10.3"
 
       - name: Check Terragrunt Version
-        working-directory: infrastructure-live
-        run: terragrunt --version && pwd && ls -lha
+        run: terragrunt --version && pwd && ls -lha && ls -lha *liv*
 
       - name: Terragrunt init
         working-directory: infrastructure-live
