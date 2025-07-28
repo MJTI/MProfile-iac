@@ -41,6 +41,7 @@ jobs:
         uses: gruntwork-io/terragrunt-action@v3
         with:
           tg_version: "0.83.0"
+          tofu_version: "1.10.3"
 
       - name: Check Terragrunt Version
         run: terragrunt --version
