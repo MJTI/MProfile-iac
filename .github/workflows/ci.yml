@@ -1,8 +1,7 @@
-name: CI/CD Terraform MProfile AWS Infrastructure
+name: CI Terraform MProfile AWS Infrastructure
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, closed]
     paths-ignore:
       - 'infrastructure-live/dev/**'
       - 'README.md'
@@ -62,42 +61,3 @@ jobs:
       - name: Check If Plan Success
         if: steps.plan.outcome != 'success'
         run: exit 1
-
-  CD_MProfile_Stage:
-    needs: CI_MProfile_IaC
-    if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.base_ref == 'main') || (github.event_name == 'push' && github.ref == 'refs/heads/main')
-    runs-on: ubuntu-24.04
-    permissions:
-      id-token: write
-      contents: read
-    
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - uses: webfactory/ssh-agent@v0.9.1
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Configure AWS with OIDC
-        uses: aws-actions/configure-aws-credentials@v4.1.0
-        with:
-          role-to-assume: "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/terraform-githubaction"
-          aws-region: ${{ vars.AWS_REGION }}
-
-      - name: install terraform
-        uses: hashicorp/setup-terraform@v3.1.2
-        with:
-          terraform_version: "1.12.2"
-
-      - name: Install Terragrunt
-        uses: gruntwork-io/terragrunt-action@v3
-        with:
-          tg_version: "0.83.0"
-          tf_path: "terraform"
-
-      - name: Terragrunt init
-        run: terragrunt run init --all --working-dir ./infrastructure-live/staging --non-interactive --no-color
-
-      - name: Applying Terragrunt
-        run: terragrunt run apply --all --working-dir ./infrastructure-live/staging --non-interactive --no-color
