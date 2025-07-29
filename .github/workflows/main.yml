@@ -8,7 +8,6 @@ on:
       - 'README.md'
     branches:
       - 'main'
-      - 'stage'
   push:
     paths-ignore:
       - 'infrastructure-live/dev/**'
