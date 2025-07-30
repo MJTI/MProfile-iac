@@ -1,5 +1,5 @@
 terraform {
-    source = "git@github.com:MJTI/terraform-aws-eks.git?ref=0.1.5"
+    source = "git@github.com:MJTI/terraform-aws-eks.git?ref=0.1.6"
 }
 
 include "root" {
@@ -29,4 +29,6 @@ inputs = {
     region = include.env.locals.region
 
     project = include.env.locals.project
+
+    cluster_admin_access = include.env.locals.cluster_admin_access
 }
