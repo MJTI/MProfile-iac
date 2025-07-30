@@ -1,5 +1,5 @@
 terraform {
-    source = "git@github.com:MJTI/terraform-aws-eks-iam-roles.git?ref=0.1.5"
+    source = "git@github.com:MJTI/terraform-aws-eks-iam-roles.git?ref=0.1.7"
 }
 
 include "root" {
@@ -19,6 +19,7 @@ dependency "eks" {
         cluster_name = "fake_cluster_name"
         eks_host = "https://mock"
         cluster_ca_certificate = file(find_in_parent_folders("fake-crt-encoded.crt"))
+        cluster_admin_access = [ "admin" ]
     }
 }
 
@@ -38,4 +39,6 @@ inputs = {
   eks_host = dependency.eks.outputs.eks_host
 
   cluster_ca_certificate = dependency.eks.outputs.cluster_ca_certificate
+
+  cluster_admin_access = include.env.locals.cluster_admin_access
 }
