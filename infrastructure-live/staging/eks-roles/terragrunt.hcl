@@ -1,5 +1,5 @@
 terraform {
-    source = "git@github.com:MJTI/terraform-aws-eks-iam-roles.git?ref=0.1.8"
+    source = "git@github.com:MJTI/terraform-aws-eks-iam-roles.git?ref=0.1.9"
 }
 
 include "root" {
@@ -38,4 +38,6 @@ inputs = {
   eks_host = dependency.eks.outputs.eks_host
 
   cluster_ca_certificate = dependency.eks.outputs.cluster_ca_certificate
+
+  cluster_admin_access = include.env.locals.cluster_admin_access
 }
