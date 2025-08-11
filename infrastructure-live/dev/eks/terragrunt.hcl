@@ -1,32 +1,32 @@
 terraform {
-    source = "git@github.com:MJTI/terraform-aws-eks.git?ref=0.1.5"
+  source = "git@github.com:MJTI/terraform-aws-eks.git?ref=0.1.5"
 }
 
 include "root" {
-    path = find_in_parent_folders("root.hcl")
+  path = find_in_parent_folders("root.hcl")
 }
 
 include "env" {
-    path = find_in_parent_folders("env.hcl")
-    expose = true
-    merge_strategy = "no_merge"
+  path           = find_in_parent_folders("env.hcl")
+  expose         = true
+  merge_strategy = "no_merge"
 }
 
 dependency "vpc" {
-    config_path = "../vpc"
+  config_path = "../vpc"
 
-    mock_outputs = {
-        vpc_id = "mock_vpc_id"
-        aws_subnet_private_ids = [ "fakeid1", "fakeid2" ]
-    }
+  mock_outputs = {
+    vpc_id                 = "mock_vpc_id"
+    aws_subnet_private_ids = ["fakeid1", "fakeid2"]
+  }
 }
 
 inputs = {
-    env = include.env.locals.env
+  env = include.env.locals.env
 
-    aws_subnet_private_ids = dependency.vpc.outputs.aws_subnet_private_ids
+  aws_subnet_private_ids = dependency.vpc.outputs.aws_subnet_private_ids
 
-    region = include.env.locals.region
+  region = include.env.locals.region
 
-    project = include.env.locals.project
+  project = include.env.locals.project
 }
