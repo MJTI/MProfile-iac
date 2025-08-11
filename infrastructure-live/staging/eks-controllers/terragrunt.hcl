@@ -1,35 +1,35 @@
 terraform {
-    source = "git@github.com:MJTI/terraform-aws-eks-controllers.git?ref=0.2.9"
+  source = "git@github.com:MJTI/terraform-aws-eks-controllers.git?ref=0.2.9"
 }
 
 include "root" {
-    path = find_in_parent_folders("root.hcl")
+  path = find_in_parent_folders("root.hcl")
 }
 
 include "env" {
-    path = find_in_parent_folders("env.hcl")
-    expose = true
-    merge_strategy = "no_merge"
+  path           = find_in_parent_folders("env.hcl")
+  expose         = true
+  merge_strategy = "no_merge"
 }
 
 dependency "vpc" {
-    config_path = "../vpc"
+  config_path = "../vpc"
 
-    mock_outputs = {
-        vpc_id = "mock_vpc_id"
-        aws_subnet_private_ids = [ "fakeid1", "fakeid2" ]
-    }
+  mock_outputs = {
+    vpc_id                 = "mock_vpc_id"
+    aws_subnet_private_ids = ["fakeid1", "fakeid2"]
+  }
 }
 
 dependency "eks" {
-    config_path = "../eks"
+  config_path = "../eks"
 
-    mock_outputs = {
-        cluster_name = "fake_cluster_name"
-        cluster_security_group_id = "fake_cluster_sg_id"
-        eks_host = "https://mock"
-        cluster_ca_certificate = file(find_in_parent_folders("fake-crt-encoded.crt"))
-    }
+  mock_outputs = {
+    cluster_name              = "fake_cluster_name"
+    cluster_security_group_id = "fake_cluster_sg_id"
+    eks_host                  = "https://mock"
+    cluster_ca_certificate    = file(find_in_parent_folders("fake-crt-encoded.crt"))
+  }
 }
 
 inputs = {

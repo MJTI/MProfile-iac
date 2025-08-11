@@ -1,25 +1,25 @@
 terraform {
-    source = "git@github.com:MJTI/terraform-aws-eks-iam-roles.git?ref=0.1.9"
+  source = "git@github.com:MJTI/terraform-aws-eks-iam-roles.git?ref=0.2.0"
 }
 
 include "root" {
-    path = find_in_parent_folders("root.hcl")
+  path = find_in_parent_folders("root.hcl")
 }
 
 include "env" {
-    path = find_in_parent_folders("env.hcl")
-    expose = true
-    merge_strategy = "no_merge"
+  path           = find_in_parent_folders("env.hcl")
+  expose         = true
+  merge_strategy = "no_merge"
 }
 
 dependency "eks" {
-    config_path = "../eks"
+  config_path = "../eks"
 
-    mock_outputs = {
-        cluster_name = "fake_cluster_name"
-        eks_host = "https://mock"
-        cluster_ca_certificate = file(find_in_parent_folders("fake-crt-encoded.crt"))
-    }
+  mock_outputs = {
+    cluster_name           = "fake_cluster_name"
+    eks_host               = "https://mock"
+    cluster_ca_certificate = file(find_in_parent_folders("fake-crt-encoded.crt"))
+  }
 }
 
 inputs = {
@@ -38,6 +38,4 @@ inputs = {
   eks_host = dependency.eks.outputs.eks_host
 
   cluster_ca_certificate = dependency.eks.outputs.cluster_ca_certificate
-
-  cluster_admin_access = include.env.locals.cluster_admin_access
 }
